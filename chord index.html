@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="utf-8"/>
+	<title>Storytelling with a Chord Diagram - Switching between Phone Brands</title>
+    	<script src="https://d3js.org/d3.v3.min.js"></script>
+    	<script src="https://d3js.org/d3.v4.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+	<link href="https://fonts.googleapis.com/css?family=Oswald:400,300,700" rel='stylesheet' type='text/css'>
+	<link href="https://fonts.googleapis.com/css?family=Raleway" rel='stylesheet' type='text/css'>
+
+  <!-- CSS -->
+ <link rel="stylesheet" href="css/normalize.css">
+  <link rel="stylesheet" href="css/skeleton.css">
+  <link rel="stylesheet" href="css/customize.css">
+  <link rel="stylesheet" href="css/style.css">
+  
+  
+  
+
+</head>
+  <body>
+   
+   
+  <div class="container one-bottom" style="margin-top: 50px">
+    <div class="ten columns">
+      <h2>Mobility on Demand Systems: Data-Driven Analysis, Simulation, Visualization</h2>
+      <p>
+        ARCH 6306/6050, DSBA 6010, ITIS 8010/6010: Wednesdays 6pm-8:30pm, Taught Online
+        <br>
+        Dr. Dimitris Papanikolaou | dpapanik@uncc.edu | Urban Synergetics Lab | https://urbansynergeticslab.net
+      </p>
+    </div>
+    <div class="two columns">
+      <a href="https://urbansynergeticslab.net/"><img class="scale-with-grid" src="img/LabLogo_dark_cropped.png"></a>
+    </div>
+  </div>
+
+  <div class="container one-bottom" >
+
+    <div class="row">
+      <img class="twelve columns scale-with-grid quarter-bottom-rel" src="img/Diagrams-Images/Ride-Share-Header.jpg">
+      
+      
+    </div>
+  </div>
+  
+  <div class="container one-bottom" style="margin-top: 10px">
+    <div class="twelve columns">
+        
+         
+     
+      <h2>Where To Taxi? <i class="fas fa-1x fa-taxi"></i><br> Data Driven Visual Analysis Of Taxi Profitability </h2> 
+      
+      <h4>Narrative</h4>
+      <p>
+        Chicago is a bustling city filled with various means of transportation. Taxis are especially common, however, for a taxi company in a dynamic city, knowing where to distribute their fleet and how to dispatch them is essential to successful business operations. Placing vehicle fleets in less dense areas will likely result in fewer total trips and lost potential revenue. However, saturating an area with too many vehicles might negatively impact overall profitability. Short trips might take less time than long distance trips, yet long trips might yield more money. 
+        <br><br>
+        As a Chicago taxi company operator looking to run a successful business, it would be valuable to know where the hotspots for pick-ups and drop-off are located. It would also be helpful to understand how the length of trip and trip time affect overall profitability for the company. Are short trips with the possibility of more overall trips more profitable? Or would it be better to pursue longer trips that can wrack up significant mileage? Also, which areas in Chicago are most profitable to operate?
+        <br><br>
+        Our strategy to evaluate this problem is to use the trip cost, which is the fare + tolls, and divide it by the trip distance and the trip time. This resulting value is a ratio of profitability per taxi trip. This ratio can then be paired with the corresponding path of travel (pickup location to drop-off location).
+         <br><br>
+         -	Trip Fare + Tolls = Trip Cost
+         <br><br>
+         -	Trip Cost / (Distance Traveled * Trip Time) = Profitability Ratio
+         <br><br>
+         Once armed with this information we can guide taxi companies where to place their fleets by analyzing which paths of travel or location zones are more or less profitable to operate.
+      </p>
+    </div>
+  </div>
+
+<!-- Map 1 -->
+  <div class="container one-bottom" >
+    <div class="twelve columns">
+      <h3>Chicago Map <i class="fas fa-map-marker-alt"></i> </h3>
+
+    </div>
+  </div>
+
+  <div id="map_1" class="one-bottom"></div>
+
+<!-- Map 2 -->
+  <div class="container one-bottom" >
+    <div class="twelve columns">
+      <h3>Taxi fleet pick up Locations <i class="fas fa-map-marker-alt"></i></h3>
+      <h5>
+     Below, this map depicts the Chicago taxi pick up locations located across the city. The larger the radii of the circle equates to a higher density of people being picked up at that location.
+      </h5>
+    </div>
+  </div>
+
+  <div id="map_2" class="one-bottom"></div>
+
+<!-- Map 3 -->
+  <div class="container one-bottom" >
+    <div class="twelve columns">
+      <h3>Taxi fleet drop off Locations <i class="fas fa-map-marker-alt"></i></h3>
+      <h5>
+        This map below shows the drop off locations within downtown Chicago for taxi services. The increasing size of the circles denotes the density of passengers being dropped off in these locations. 
+      </h5>
+    </div>
+  </div>
+
+  <div id="my_dataviz"></div>
+
+  <div id="map_3" class="one-bottom"></div>
+  
+  <div class="container one-bottom">
+      <h3>Charts showing the income of each company and compare them <i class="fas fa-chart-bar"></i> </h3>
+  </div>
+  <div class="container one-bottom">
+      <div class="row">
+          <img class="ten columns scale-with-grid quarter-bottom-rel" src="img/Diagrams-Images/TaxiProfit.jpg">
+      </div>
+   
+   
+    <div id="body">
+		<div id="chart"></div>
+		<div id="clickerWrapper">
+			<div id="progress"></div>
+			<div id="clicker">Let's Start</div>
+		</div>
+		<div id="buttonWrapper">
+			<div id="buttonWrapperInner">
+				<div id="skip" class="sideButton">SKIP INTRO</div>
+				<div id="reset" class="sideButton">RESET</div>
+				<div id="link" class="sideButton"><a href="http://bl.ocks.org/nbremer/raw/94db779237655907b907/" target="_blank">GO TO SOURCE</a></div>
+			</div>
+		</div>
+    </div>
+    
+    <script src="js/chords.js"></script>
+    
+    <script>
+
+// set the dimensions and margins of the graph
+var margin = {top: 10, right: 30, bottom: 30, left: 60},
+    width = 460 - margin.left - margin.right,
+    height = 400 - margin.top - margin.bottom;
+
+// append the svg object to the body of the page
+var svg = d3.select("#my_dataviz")
+  .append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform",
+          "translate(" + margin.left + "," + margin.top + ")");
+
+//Read the data
+d3.csv("https://raw.githubusercontent.com/holtzy/data_to_viz/master/Example_dataset/5_OneCatSevNumOrdered.csv", function(data) {
+
+  // group the data: one array for each value of the X axis.
+  var sumstat = d3.nest()
+    .key(function(d) { return d.year;})
+    .entries(data);
+
+  // Stack the data: each group will be represented on top of each other
+  var mygroups = ["Helen", "Amanda", "Ashley"] // list of group names
+  var mygroup = [1,2,3] // list of group names
+  var stackedData = d3.stack()
+    .keys(mygroup)
+    .value(function(d, key){
+      return d.values[key].n
+    })
+    (sumstat)
+
+  // Add X axis --> it is a date format
+  var x = d3.scaleLinear()
+    .domain(d3.extent(data, function(d) { return d.year; }))
+    .range([ 0, width ]);
+  svg.append("g")
+    .attr("transform", "translate(0," + height + ")")
+    .call(d3.axisBottom(x).ticks(5));
+
+  // Add Y axis
+  var y = d3.scaleLinear()
+    .domain([0, d3.max(data, function(d) { return +d.n; })*1.2])
+    .range([ height, 0 ]);
+  svg.append("g")
+    .call(d3.axisLeft(y));
+
+  // color palette
+  var color = d3.scaleOrdinal()
+    .domain(mygroups)
+    .range(['#e41a1c','#377eb8','#4daf4a','#984ea3','#ff7f00','#ffff33','#a65628','#f781bf','#999999'])
+
+  // Show the areas
+  svg
+    .selectAll("mylayers")
+    .data(stackedData)
+    .enter()
+    .append("path")
+      .style("fill", function(d) { name = mygroups[d.key-1] ;  return color(name); })
+      .attr("d", d3.area()
+        .x(function(d, i) { return x(d.data.key); })
+        .y0(function(d) { return y(d[0]); })
+        .y1(function(d) { return y(d[1]); })
+    )
+
+})
+</script>
+   </body>
+</html>
